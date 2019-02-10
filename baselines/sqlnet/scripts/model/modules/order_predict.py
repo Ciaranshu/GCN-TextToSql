@@ -40,7 +40,7 @@ class OrderPredictor(nn.Module):
         self.dat_out_c = nn.Linear(N_h, N_h)
         self.dat_out = nn.Sequential(nn.Tanh(), nn.Linear(N_h, 5)) #for 4 desc/asc limit/none combinations
 
-        self.softmax = nn.Softmax() #dim=1
+        self.softmax = nn.Softmax(dim=1) #dim=1
         self.CE = nn.CrossEntropyLoss()
         self.log_softmax = nn.LogSoftmax()
         self.mlsml = nn.MultiLabelSoftMarginLoss()

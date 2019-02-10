@@ -50,7 +50,7 @@ class GroupPredictor(nn.Module):
         self.op_out_c = nn.Linear(N_h, N_h)
         self.op_out = nn.Sequential(nn.Tanh(), nn.Linear(N_h, 12)) #to 5
 
-        self.softmax = nn.Softmax() #dim=1
+        self.softmax = nn.Softmax(dim=1) #dim=1
         self.CE = nn.CrossEntropyLoss()
         self.log_softmax = nn.LogSoftmax()
         self.mlsml = nn.MultiLabelSoftMarginLoss()

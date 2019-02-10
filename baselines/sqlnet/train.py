@@ -36,7 +36,7 @@ if __name__ == '__main__':
             TRAIN_DB, DEV_DB, TEST_DB = load_dataset(args.dataset, use_small=USE_SMALL)
 
 
-    word_emb = load_word_emb('glove/glove.%dB.%dd.txt'%(B_word,N_word), \
+    word_emb = load_word_emb('/disk/scratch_ssd/s1783039/glove/glove.%dB.%dd.txt'%(B_word,N_word), \
             load_used=args.train_emb, use_small=USE_SMALL)
 
     model = SQLNet(word_emb, N_word=N_word, gpu=GPU, trainable_emb=args.train_emb)

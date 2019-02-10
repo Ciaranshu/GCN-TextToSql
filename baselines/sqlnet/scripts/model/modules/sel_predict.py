@@ -40,7 +40,7 @@ class SelPredictor(nn.Module):
         self.agg_out_c = nn.Linear(N_h, N_h)
         self.agg_out = nn.Sequential(nn.Tanh(), nn.Linear(N_h, 6)) #to 5
 
-        self.softmax = nn.Softmax() #dim=1
+        self.softmax = nn.Softmax(dim=1) #dim=1
         self.CE = nn.CrossEntropyLoss()
         self.log_softmax = nn.LogSoftmax()
         self.mlsml = nn.MultiLabelSoftMarginLoss()
