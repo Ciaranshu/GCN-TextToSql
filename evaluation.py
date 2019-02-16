@@ -433,10 +433,11 @@ class Evaluator:
 def isValidSQL(sql, db):
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
-    try:
-        cursor.execute(sql)
-    except:
-        return False
+    #try:
+    cursor.execute(sql)
+    print ('Sucess')
+    #except:
+        #return False
     return True
 
 
@@ -544,8 +545,10 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
 
         if etype in ["all", "exec"]:
             exec_score = eval_exec_match(db, p_str, g_str, p_sql, g_sql)
+	    #print exec_score
             if exec_score:
-                scores[hardness]['exec'] += 1
+                scores[hardness]['exec'] += float(1)
+		scores['all']['exec'] += 1
 
         if etype in ["all", "match"]:
             exact_score = evaluator.eval_exact_match(p_sql, g_sql)
@@ -580,11 +583,17 @@ def evaluate(gold, predict, db_dir, etype, kmaps):
                 'partial': partial_scores
             })
 
+    #print scores['easy']['exec']
+
     for level in levels:
         if scores[level]['count'] == 0:
             continue
         if etype in ["all", "exec"]:
-            scores[level]['exec'] /= scores[level]['count']
+	    #print  scores[level]['exec']
+	    score = scores[level]['exec']
+            scores[level]['exec'] = float(score) / scores[level]['count']
+	    #print  scores['easy']['exec']
+	    #print  scores[level]['exec']
 
         if etype in ["all", "match"]:
             scores[level]['exact'] /= scores[level]['count']
@@ -617,10 +626,12 @@ def eval_exec_match(db, p_str, g_str, pred, gold):
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
     try:
-        cursor.execute(p_str)
-        p_res = cursor.fetchall()
+    #print (p_str)
+	cursor.execute(p_str)
+	p_res = cursor.fetchall()
+    
     except:
-        return False
+	return False
 
     cursor.execute(g_str)
     q_res = cursor.fetchall()
@@ -630,8 +641,8 @@ def eval_exec_match(db, p_str, g_str, pred, gold):
         for idx, val_unit in enumerate(val_units):
             key = tuple(val_unit[1]) if not val_unit[2] else (val_unit[0], tuple(val_unit[1]), tuple(val_unit[2]))
             rmap[key] = [r[idx] for r in res]
+	#print rmap
         return rmap
-
     p_val_units = [unit[1] for unit in pred['select'][1]]
     q_val_units = [unit[1] for unit in gold['select'][1]]
     return res_map(p_res, p_val_units) == res_map(q_res, q_val_units)
